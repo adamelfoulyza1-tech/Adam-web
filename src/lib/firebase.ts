@@ -15,8 +15,9 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 // Use the dedicated databaseId if provided
-export const db = config.firestoreDatabaseId && config.firestoreDatabaseId !== '(default)'
-  ? getFirestore(app, config.firestoreDatabaseId)
+const firestoreDatabaseId = (config as any).firestoreDatabaseId;
+export const db = firestoreDatabaseId && firestoreDatabaseId !== '(default)'
+  ? getFirestore(app, firestoreDatabaseId)
   : getFirestore(app);
 
 export const auth = getAuth(app);

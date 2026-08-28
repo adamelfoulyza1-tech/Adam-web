@@ -163,7 +163,7 @@ export const SettingsView: React.FC<SettingsViewProps> = ({
           </div>
           <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
             <div className="text-slate-500">Firestore Database ID</div>
-            <div className="font-mono font-bold text-slate-200 mt-0.5">{config.firestoreDatabaseId || '(default)'}</div>
+            <div className="font-mono font-bold text-slate-200 mt-0.5">{(config as any).firestoreDatabaseId || '(default)'}</div>
           </div>
           <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800">
             <div className="text-slate-500">จำนวน To-Do ในระบบ</div>

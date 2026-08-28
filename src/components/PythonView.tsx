@@ -63,10 +63,10 @@ export const PythonView: React.FC<PythonViewProps> = ({
   const currentExercise: PythonExercise | undefined =
     filteredExercises[activeExerciseIndex] || PYTHON_EXERCISES[0];
 
-  // Sync userCode when current exercise changes
+  // Sync userCode when current exercise changes - start with blank code for user to write themselves
   useEffect(() => {
     if (currentExercise) {
-      setUserCode(currentExercise.initialCode);
+      setUserCode('');
       setExecutionResult(null);
       setShowHintIndex(-1);
       setShowSolution(false);
@@ -128,7 +128,7 @@ export const PythonView: React.FC<PythonViewProps> = ({
 
   const resetCode = () => {
     if (currentExercise) {
-      setUserCode(currentExercise.initialCode);
+      setUserCode('');
       setExecutionResult(null);
     }
   };

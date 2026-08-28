@@ -157,6 +157,28 @@ export const fetchClassroomData = async (accessToken: string): Promise<{ courses
               dueTime = `${h}:${min}`;
             }
 
+            // Fetch student submission status for this coursework item if possible
+            let hwStatus: HomeworkItem['status'] = 'not_started';
+            try {
+              const subRes = await fetch(
+                `https://classroom.googleapis.com/v1/courses/${course.id}/courseWork/${item.id}/studentSubmissions?userId=me`,
+                { headers: { Authorization: `Bearer ${accessToken}` } }
+              );
+              if (subRes.ok) {
+                const subData = await subRes.json();
+                const submission = subData.studentSubmissions?.[0];
+                if (submission) {
+                  if (submission.state === 'TURNED_IN' || submission.state === 'RETURNED') {
+                    hwStatus = 'turned_in';
+                  } else if (submission.state === 'CREATED' || submission.state === 'RECLAIMED_BY_STUDENT') {
+                    hwStatus = 'in_progress';
+                  }
+                }
+              }
+            } catch (subErr) {
+              // Ignore submission check error and default to not_started
+            }
+
             homeworkList.push({
               id: item.id,
               courseId: course.id,
@@ -165,7 +187,7 @@ export const fetchClassroomData = async (accessToken: string): Promise<{ courses
               description: item.description,
               dueDate,
               dueTime,
-              status: 'not_started',
+              status: hwStatus,
               alternateLink: item.alternateLink,
               maxPoints: item.maxPoints,
               source: 'google_classroom',

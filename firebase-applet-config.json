@@ -1,12 +1,11 @@
 {
-  "projectId": "bamboo-zephyr-2dx1j",
-  "appId": "1:172629125708:web:1ca3eaf82b0fae96bb22e9",
-  "apiKey": "AIzaSyBCh8Ha5PwitticPmrvkKq9V8OLsGB8Nuo",
-  "authDomain": "bamboo-zephyr-2dx1j.firebaseapp.com",
-  "firestoreDatabaseId": "ai-studio-dailyquesttaskex-845f680b-f266-4852-bf14-e41d7ce6698b",
-  "storageBucket": "bamboo-zephyr-2dx1j.firebasestorage.app",
-  "messagingSenderId": "172629125708",
+  "projectId": "gen-lang-client-0748588313",
+  "appId": "1:117280332567:web:e8b401cd5d8b01640b7552",
+  "apiKey": "AIzaSyAafpoa0rGs2p26ZS0JZlU-ZFHKtCvy0WA",
+  "authDomain": "gen-lang-client-0748588313.firebaseapp.com",
+  "storageBucket": "gen-lang-client-0748588313.firebasestorage.app",
+  "messagingSenderId": "117280332567",
   "measurementId": "",
-  "oAuthClientId": "172629125708-a1olqbbkvgf5en1m7hgncjk0f7nkjhal.apps.googleusercontent.com",
+  "oAuthClientId": "117280332567-dl0i668tlnb4ir556vcau9t4770gpj9f.apps.googleusercontent.com",
   "recaptchaSiteKey": ""
 }

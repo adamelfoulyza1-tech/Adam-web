@@ -144,25 +144,33 @@ export const ClassroomView: React.FC<ClassroomViewProps> = ({
       if ((window as any).google?.accounts?.oauth2) {
         const client = (window as any).google.accounts.oauth2.initTokenClient({
           client_id: googleClientId,
-          scope: 'https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly',
+          scope: 'https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.coursework.me.readonly https://www.googleapis.com/auth/classroom.student-submissions.me.readonly',
           callback: async (response: any) => {
             if (response.access_token) {
-              setSyncMessage('กำลังดึงข้อมูลการบ้านและคอร์สจาก Google Classroom...');
+              setSyncMessage('กำลังดึงข้อมูลคอร์สและการบ้านพร้อมกำหนดส่งจาก Google Classroom...');
               try {
                 const data = await fetchClassroomData(response.access_token);
                 if (data.homework.length > 0) {
                   onBatchSaveHomework(data.homework);
-                  setSyncMessage(`นำเข้าการบ้านสำเร็จทั้งหมด ${data.homework.length} รายการ!`);
+                  setSyncMessage(`🎉 ซิงค์สำเร็จ! นำเข้าและบันทึกการบ้านพร้อมวันกำหนดส่งเรียบร้อย ${data.homework.length} รายการ`);
                 } else {
+                  setSyncMessage('เชื่อมต่อสำเร็จ! แต่ไม่พบการบ้านที่เปิดอยู่ในบัญชี Google Classroom ของคุณ จึงโหลดชุดข้อมูลตัวอย่างให้');
                   handleLoadSampleClassroom();
                 }
-              } catch (e) {
-                console.warn('Classroom sync API fallback to sample:', e);
+              } catch (e: any) {
+                console.warn('Classroom sync API error, fallback to sample:', e);
+                setSyncMessage('การเรียก Google Classroom ติดขัด ได้โหลดข้อมูลตัวอย่างให้แทน');
                 handleLoadSampleClassroom();
               }
-            } else {
-              handleLoadSampleClassroom();
+            } else if (response.error) {
+              setSyncMessage(`การขอสิทธิ์ถูกยกเลิกหรือล้มเหลว (${response.error})`);
             }
+            setIsSyncing(false);
+            setTimeout(() => setSyncMessage(null), 5000);
+          },
+          error_callback: (err: any) => {
+            console.error('GIS error callback:', err);
+            setSyncMessage('เกิดข้อผิดพลาดในการเปิดหน้าต่างเข้าสู่ระบบ Google');
             setIsSyncing(false);
             setTimeout(() => setSyncMessage(null), 4000);
           },
