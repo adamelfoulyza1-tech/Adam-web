@@ -1,0 +1,6 @@
+{
+  "name": "Daily Quest - Task, Expense, Python & Classroom Hub",
+  "description": "Daily productivity hub featuring daily to-do tasks, expense tracker with slip upload & monthly analytics, Google Classroom homework calendar, and progressive W3Schools Python coding challenges with Firebase persistence.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
