@@ -26,6 +26,9 @@ googleProvider.addScope('https://www.googleapis.com/auth/classroom.courses.reado
 googleProvider.addScope('https://www.googleapis.com/auth/classroom.coursework.me.readonly');
 googleProvider.addScope('https://www.googleapis.com/auth/classroom.coursework.students.readonly');
 
-export const googleClientId = config.oAuthClientId;
+export const googleClientId =
+  (import.meta as any).env?.VITE_GOOGLE_CLIENT_ID ||
+  config.oAuthClientId ||
+  '193033896599-c0m3c0k2ul5g343bo1dsiq0j23oc132r.apps.googleusercontent.com';
 
 export default app;
