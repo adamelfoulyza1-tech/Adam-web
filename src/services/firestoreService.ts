@@ -36,6 +36,20 @@ const setLocal = <T>(key: string, value: T): void => {
   }
 };
 
+// Firestore's setDoc() throws if any field value is `undefined`
+// (e.g. an empty "note" or a skipped slip image). That throw was being
+// silently swallowed by the try/catch below, so the document never
+// actually reached Firestore and the realtime listener never fired -
+// the UI looked like "nothing happened" after clicking save.
+// Stripping undefined keys before writing fixes that.
+const stripUndefined = <T extends Record<string, any>>(obj: T): T => {
+  const clean: Record<string, any> = {};
+  Object.entries(obj).forEach(([key, value]) => {
+    if (value !== undefined) clean[key] = value;
+  });
+  return clean as T;
+};
+
 // ===================== TASKS =====================
 
 export const subscribeTasks = (onUpdate: (tasks: Task[]) => void) => {
@@ -78,7 +92,7 @@ export const saveTask = async (task: Task): Promise<void> => {
 
   try {
     const ref = doc(db, TASKS_COLLECTION, task.id);
-    await setDoc(ref, task, { merge: true });
+    await setDoc(ref, stripUndefined(task), { merge: true });
   } catch (err) {
     console.warn('Firestore saveTask offline fallback:', err);
   }
@@ -139,7 +153,7 @@ export const saveExpense = async (expense: ExpenseItem): Promise<void> => {
 
   try {
     const ref = doc(db, EXPENSES_COLLECTION, expense.id);
-    await setDoc(ref, expense, { merge: true });
+    await setDoc(ref, stripUndefined(expense), { merge: true });
   } catch (err) {
     console.warn('Firestore saveExpense offline fallback:', err);
   }
@@ -200,7 +214,7 @@ export const saveHomework = async (item: HomeworkItem): Promise<void> => {
 
   try {
     const ref = doc(db, HOMEWORK_COLLECTION, item.id);
-    await setDoc(ref, item, { merge: true });
+    await setDoc(ref, stripUndefined(item), { merge: true });
   } catch (err) {
     console.warn('Firestore saveHomework offline fallback:', err);
   }
@@ -217,7 +231,7 @@ export const saveBatchHomework = async (items: HomeworkItem[]): Promise<void> =>
   for (const item of items) {
     try {
       const ref = doc(db, HOMEWORK_COLLECTION, item.id);
-      await setDoc(ref, item, { merge: true });
+      await setDoc(ref, stripUndefined(item), { merge: true });
     } catch (e) {
       console.warn('Batch save homework error:', e);
     }
@@ -272,7 +286,7 @@ export const saveProgress = async (progress: UserProgress): Promise<void> => {
   setLocal('cached_python_progress', progress);
   try {
     const ref = doc(db, PROGRESS_COLLECTION, 'user_main');
-    await setDoc(ref, progress, { merge: true });
+    await setDoc(ref, stripUndefined(progress), { merge: true });
   } catch (err) {
     console.warn('Firestore saveProgress offline fallback:', err);
   }
